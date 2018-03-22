@@ -1,8 +1,14 @@
 package com.autocomplete;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class RWayTrie implements Trie {
+
+    private List<Node> roots = new ArrayList<>();
+    private int size;
 
     @Override
     public void add(Tuple tuple) {
@@ -32,6 +38,23 @@ public class RWayTrie implements Trie {
     @Override
     public int size() {
         return 0;
+    }
+
+    public void createTriesWithEnglishAlphabet(){
+        final char[] englishAlphabet  = IntStream.rangeClosed('a', 'z')
+                .mapToObj(c -> "" + (char) c).collect(Collectors.joining()).toCharArray();
+        for(char c : englishAlphabet){
+            Node node = new Node(c, false, null);
+            roots.add(node);
+        }
+    }
+
+    public List<Node> getRoots() {
+        return roots;
+    }
+
+    public void setRoots(List<Node> roots) {
+        this.roots = roots;
     }
 
     private class Node {

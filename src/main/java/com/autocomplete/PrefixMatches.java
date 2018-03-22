@@ -5,8 +5,10 @@ import java.util.Iterator;
 public class PrefixMatches {
 
     private Trie trie;
+    private RWayTrie rWayTrie = new RWayTrie();
 
     public int add(String... strings) {
+
         return 0;
     }
 
@@ -19,7 +21,7 @@ public class PrefixMatches {
     }
 
     public int size() {
-        return 0;
+       return 0;
     }
 
     public Iterator<String> wordsWithPrefix(String pref, int k) {
@@ -28,5 +30,13 @@ public class PrefixMatches {
 
     public Iterator<String> wordsWithPrefix(String pref) {
         return null;
+    }
+
+    public RWayTrie getrWayTrie() {
+        return rWayTrie;
+    }
+
+    public void setrWayTrie(RWayTrie rWayTrie) {
+        this.rWayTrie = rWayTrie;
     }
 }
