@@ -1,5 +1,6 @@
 /.idea/
 /target/
 /resources/log.txt
+/resources/words.txt
 *.iml
 /release/
