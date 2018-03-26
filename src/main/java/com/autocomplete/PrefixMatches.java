@@ -4,13 +4,9 @@ import java.util.Iterator;
 
 public class PrefixMatches {
 
-
-    private RWayTrie rWayTrie;
-    private Trie trie;
+    private Trie trie = new RWayTrie();
 
     public PrefixMatches() {
-        this.rWayTrie = new RWayTrie();
-        this.trie = this.rWayTrie;
     }
 
     public int add(String... strings) {
@@ -34,7 +30,7 @@ public class PrefixMatches {
     }
 
     public int size() {
-       return getRWayTrie().getSize();
+        return trie.size();
     }
 
     public Iterator<String> wordsWithPrefix(String pref, int k) {
@@ -45,11 +41,4 @@ public class PrefixMatches {
         return null;
     }
 
-    public RWayTrie getRWayTrie() {
-        return rWayTrie;
-    }
-
-    public void setRWayTrie(RWayTrie rWayTrie) {
-        this.rWayTrie = rWayTrie;
-    }
 }

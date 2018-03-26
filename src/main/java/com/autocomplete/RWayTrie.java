@@ -47,11 +47,11 @@ public class RWayTrie implements Trie {
         }
     }
 
-    private char getFirstChar(String s){
-        return s.substring(0,1).charAt(0);
+    private char getFirstChar(String s) {
+        return s.substring(0, 1).charAt(0);
     }
 
-    private char[] getArrayOfCharsWithoutFirstChar(String s){
+    private char[] getArrayOfCharsWithoutFirstChar(String s) {
         return s.substring(1).toCharArray();
     }
 
@@ -111,7 +111,7 @@ public class RWayTrie implements Trie {
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     public List<Node> getRoots() {
