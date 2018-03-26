@@ -3,6 +3,11 @@ package com.autocomplete;
 public class Run {
 
     public static void main(String... args) {
-
+        PrefixMatches prefixMatches = new PrefixMatches();
+        String[] strings = InputReader.getInputData();
+        prefixMatches.add(strings);
+        System.out.println(prefixMatches.size());
+        prefixMatches.add("pooooooooooossssssssssssssssss");
+        System.out.println(prefixMatches.size());
     }
 }
