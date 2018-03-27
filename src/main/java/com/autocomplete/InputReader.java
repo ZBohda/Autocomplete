@@ -11,26 +11,26 @@ import java.util.regex.Pattern;
 public class InputReader {
 
     private static final Logger LOG = Logger.getLogger(InputReader.class.getName());
+    private static final String PATTERN = "[a-z]+";
+    private static final String PATH = "C:\\words.txt";
+    private static final String DIVIDER = " ";
 
     public static String[] getInputData() {
         StringBuilder stringBuilder = new StringBuilder();
-        String[] strings = new String[0];
-        Pattern pattern = Pattern.compile("[a-z]+");
+        Pattern pattern = Pattern.compile(PATTERN);
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("C:\\words.txt"));
-            String line = bufferedReader.readLine();
-            while (line != null) {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(PATH));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
                 Matcher matcher = pattern.matcher(line);
                 while (matcher.find()) {
-                    stringBuilder.append(matcher.group()).append(" ");
+                    stringBuilder.append(matcher.group()).append(DIVIDER);
                 }
-                line = bufferedReader.readLine();
             }
-            String result = stringBuilder.toString();
-            strings = result.split(" ");
         } catch (IOException e) {
             LOG.error(e);
         }
-        return strings;
+        String result = stringBuilder.toString();
+        return result.split(DIVIDER);
     }
 }
