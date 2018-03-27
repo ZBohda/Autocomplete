@@ -12,5 +12,7 @@ public class Run {
         String[] strings1 = {"looajhsdawfahgwvad", "ajhwvdawagwdanwbahw", null, "ahwagwawgdw hgwhawiwoaiuwfda asjhdhawkjghahwdjhg"};
         prefixMatches.add(strings1);
         System.out.println(prefixMatches.size());
+        prefixMatches.add("sasda");
+        System.out.println(prefixMatches.contains(null));
     }
 }

@@ -55,25 +55,6 @@ public class RWayTrie implements Trie {
         return s.substring(1).toCharArray();
     }
 
-    private Node findRootNodeByChar(char c) {
-        for (Node root : roots) {
-            if (c == root.getCharacter()) {
-                return root;
-            }
-        }
-        return null;
-    }
-
-    private Node findSheetByChar(Node root, char c) {
-        List<Node> nodes = root.getNextNodes();
-        for (Node node : nodes) {
-            if (node.getCharacter() == c) {
-                return node;
-            }
-        }
-        return null;
-    }
-
     private Node insertNode(char c, Node root) {
         Node node = new Node(c, root);
         node.setPrefNode(root);
@@ -91,7 +72,41 @@ public class RWayTrie implements Trie {
 
     @Override
     public boolean contains(String word) {
+        char[] characters;
+        char firstChar = getFirstChar(word);
+        characters = getArrayOfCharsWithoutFirstChar(word);
+        Node root = findRootNodeByChar(firstChar);
+        int counter = 0;
+        for (char c : characters) {
+            Node node;
+            if((node = findSheetByChar(root, c)) != null){
+                counter++;
+                if(counter == characters.length && node.isWord()){
+                    return true;
+                }
+                else root = node;
+            }
+        }
         return false;
+    }
+
+    private Node findRootNodeByChar(char c) {
+        for (Node root : roots) {
+            if (c == root.getCharacter()) {
+                return root;
+            }
+        }
+        return null;
+    }
+
+    private Node findSheetByChar(Node root, char c) {
+        List<Node> nodes = root.getNextNodes();
+        for (Node node : nodes) {
+            if (node.getCharacter() == c) {
+                return node;
+            }
+        }
+        return null;
     }
 
     @Override

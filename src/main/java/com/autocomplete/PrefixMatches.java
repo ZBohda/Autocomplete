@@ -5,6 +5,7 @@ import java.util.Iterator;
 public class PrefixMatches {
 
     private final static String DIVIDER = " ";
+    private final static int MINIMAL_WORD_LENGTH = 2;
 
     private Trie trie = new RWayTrie();
 
@@ -33,7 +34,7 @@ public class PrefixMatches {
         int words = 0;
         String[] strings = s.split(DIVIDER);
         for (String string : strings) {
-            if (string.length() > 2) {
+            if (string.length() > MINIMAL_WORD_LENGTH) {
                 Tuple tuple = new Tuple(string);
                 trie.add(tuple);
                 words++;
@@ -43,7 +44,15 @@ public class PrefixMatches {
     }
 
     public boolean contains(String word) {
-        return false;
+        boolean result = false;
+        if(validateWord(word)){
+            result = trie.contains(word);
+        }
+        return result;
+    }
+
+    private boolean validateWord(String word) {
+        return word != null && word.length() > MINIMAL_WORD_LENGTH;
     }
 
     public boolean delete(String word) {
