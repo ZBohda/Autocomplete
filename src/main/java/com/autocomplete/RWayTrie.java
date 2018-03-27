@@ -19,11 +19,11 @@ public class RWayTrie implements Trie {
         Node root = findRootNodeByChar(firstChar);
         int counter = 0;
         for (char c : characters) {
-            if (root.getNextNodes().isEmpty()) {
+            if (root.nextNodes.isEmpty()) {
                 root = insertNode(c, root);
                 counter++;
                 if (characters.length == counter) {
-                    root.setWord(true);
+                    root.isWord = true;
                     size++;
                 }
             } else {
@@ -32,14 +32,14 @@ public class RWayTrie implements Trie {
                     root = sheet;
                     counter++;
                     if (characters.length == counter) {
-                        root.setWord(true);
+                        root.isWord = true;
                         size++;
                     }
                 } else {
                     root = insertNode(c, root);
                     counter++;
                     if (characters.length == counter) {
-                        root.setWord(true);
+                        root.isWord = true;
                         size++;
                     }
                 }
@@ -57,8 +57,8 @@ public class RWayTrie implements Trie {
 
     private Node insertNode(char c, Node root) {
         Node node = new Node(c, root);
-        node.setPrefNode(root);
-        root.getNextNodes().add(node);
+        node.prevNode = root;
+        root.nextNodes.add(node);
         return node;
     }
 
@@ -77,7 +77,7 @@ public class RWayTrie implements Trie {
             Node node;
             if ((node = findSheetByChar(root, c)) != null) {
                 counter++;
-                if (counter == characters.length && node.isWord()) {
+                if (counter == characters.length && node.isWord) {
                     return node;
                 } else root = node;
             }
@@ -87,7 +87,7 @@ public class RWayTrie implements Trie {
 
     private Node findRootNodeByChar(char c) {
         for (Node root : roots) {
-            if (c == root.getCharacter()) {
+            if (c == root.character) {
                 return root;
             }
         }
@@ -95,9 +95,9 @@ public class RWayTrie implements Trie {
     }
 
     private Node findSheetByChar(Node root, char c) {
-        List<Node> nodes = root.getNextNodes();
+        List<Node> nodes = root.nextNodes;
         for (Node node : nodes) {
-            if (node.getCharacter() == c) {
+            if (node.character == c) {
                 return node;
             }
         }
@@ -112,7 +112,7 @@ public class RWayTrie implements Trie {
         Node root = findRootNodeByChar(firstChar);
         Node node;
         if ((node = findNodeWord(characters, root)) != null) {
-            node.setWord(false);
+            node.isWord = false;
             return true;
         } else return false;
     }
@@ -125,6 +125,24 @@ public class RWayTrie implements Trie {
     @Override
     public Iterable<String> wordsWithPrefix(String pref) {
         return null;
+    }
+
+    private Iterator<String> getIterator() {
+        return new Iterator<String>() {
+
+            private String word;
+            private Queue<Node> nodes = new ArrayDeque<>();
+
+            @Override
+            public boolean hasNext() {
+                return false;
+            }
+
+            @Override
+            public String next() {
+                return null;
+            }
+        };
     }
 
     @Override
@@ -155,6 +173,23 @@ public class RWayTrie implements Trie {
 
     public void setRoots(List<Node> roots) {
         this.roots = roots;
+    }
+
+    public class Node {
+        private char character;
+        private boolean isWord;
+        private List<Node> nextNodes = new ArrayList<>();
+        private Node prevNode;
+
+        public Node(char character, boolean isWord) {
+            this.character = character;
+            this.isWord = isWord;
+        }
+
+        public Node(char character, Node prefNode) {
+            this.character = character;
+            this.prevNode = prefNode;
+        }
     }
 
 }
