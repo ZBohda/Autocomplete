@@ -1,7 +1,7 @@
 package com.autocomplete;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -132,14 +132,6 @@ public class RWayTrie implements Trie {
         return size;
     }
 
-    public List<Node> getRoots() {
-        return roots;
-    }
-
-    public void setRoots(List<Node> roots) {
-        this.roots = roots;
-    }
-
     public RWayTrie() {
         createTriesWithAlphabet();
     }
@@ -157,59 +149,12 @@ public class RWayTrie implements Trie {
                 .mapToObj(c -> "" + (char) c).collect(Collectors.joining()).toCharArray();
     }
 
-    public class Node {
-        private char character;
-        private boolean isWord;
-        private List<Node> nextNodes = new ArrayList<>();
-        private Node prefNode;
-
-        public Node(char character, boolean isWord, List<Node> nextNodes, Node prefNode) {
-            this.character = character;
-            this.isWord = isWord;
-            this.nextNodes = nextNodes;
-            this.prefNode = prefNode;
-        }
-
-        public Node(char character, boolean isWord) {
-            this.character = character;
-            this.isWord = isWord;
-        }
-
-        public Node(char character, Node prefNode) {
-            this.character = character;
-            this.prefNode = prefNode;
-        }
-
-        public char getCharacter() {
-            return character;
-        }
-
-        public void setCharacter(char character) {
-            this.character = character;
-        }
-
-        public boolean isWord() {
-            return isWord;
-        }
-
-        public void setWord(boolean word) {
-            isWord = word;
-        }
-
-        public List<Node> getNextNodes() {
-            return nextNodes;
-        }
-
-        public void setNextNodes(List<Node> nextNodes) {
-            this.nextNodes = nextNodes;
-        }
-
-        public Node getPrefNode() {
-            return prefNode;
-        }
-
-        public void setPrefNode(Node prefNode) {
-            this.prefNode = prefNode;
-        }
+    public List<Node> getRoots() {
+        return roots;
     }
+
+    public void setRoots(List<Node> roots) {
+        this.roots = roots;
+    }
+
 }
