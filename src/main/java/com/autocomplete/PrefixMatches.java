@@ -44,11 +44,7 @@ public class PrefixMatches {
     }
 
     public boolean contains(String word) {
-        boolean result = false;
-        if(validateWord(word)){
-            result = trie.contains(word);
-        }
-        return result;
+        return validateWord(word) && trie.contains(word);
     }
 
     private boolean validateWord(String word) {
@@ -56,7 +52,7 @@ public class PrefixMatches {
     }
 
     public boolean delete(String word) {
-        return false;
+        return validateWord(word) && trie.delete(word);
     }
 
     public int size() {

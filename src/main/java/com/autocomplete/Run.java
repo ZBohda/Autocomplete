@@ -13,6 +13,7 @@ public class Run {
         prefixMatches.add(strings1);
         System.out.println(prefixMatches.size());
         prefixMatches.add("sasda");
-        System.out.println(prefixMatches.contains(null));
+        System.out.println(prefixMatches.delete("asjhdhawkjghahwdjhg"));
+        System.out.println(prefixMatches.delete("asjhdhawkjghahwdjhg"));
     }
 }

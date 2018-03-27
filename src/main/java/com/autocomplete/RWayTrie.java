@@ -62,32 +62,27 @@ public class RWayTrie implements Trie {
         return node;
     }
 
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
     @Override
     public boolean contains(String word) {
         char[] characters;
         char firstChar = getFirstChar(word);
         characters = getArrayOfCharsWithoutFirstChar(word);
         Node root = findRootNodeByChar(firstChar);
+        return findNodeWord(characters, root) != null;
+    }
+
+    private Node findNodeWord(char[] characters, Node root) {
         int counter = 0;
         for (char c : characters) {
             Node node;
-            if((node = findSheetByChar(root, c)) != null){
+            if ((node = findSheetByChar(root, c)) != null) {
                 counter++;
-                if(counter == characters.length && node.isWord()){
-                    return true;
-                }
-                else root = node;
+                if (counter == characters.length && node.isWord()) {
+                    return node;
+                } else root = node;
             }
         }
-        return false;
+        return null;
     }
 
     private Node findRootNodeByChar(char c) {
@@ -111,7 +106,15 @@ public class RWayTrie implements Trie {
 
     @Override
     public boolean delete(String word) {
-        return false;
+        char[] characters;
+        char firstChar = getFirstChar(word);
+        characters = getArrayOfCharsWithoutFirstChar(word);
+        Node root = findRootNodeByChar(firstChar);
+        Node node;
+        if ((node = findNodeWord(characters, root)) != null) {
+            node.setWord(false);
+            return true;
+        } else return false;
     }
 
     @Override
