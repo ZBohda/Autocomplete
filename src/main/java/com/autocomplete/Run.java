@@ -10,7 +10,7 @@ public class Run {
         prefixMatches.add(strings);
         System.out.println(prefixMatches.size());
         System.out.println(prefixMatches.contains("www"));
-        System.out.println(prefixMatches.delete("ww"));
+        System.out.println(prefixMatches.delete("www"));
         System.out.println(prefixMatches.size());
 
 

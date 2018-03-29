@@ -5,7 +5,7 @@ import java.util.stream.IntStream;
 
 public class RWayTrie implements Trie {
 
-    private static final int A_ASCII_CODE = 97;
+    private static final int ASCII_CODE_OF_FIRST_LETTER = 97;
     private static final int NUMBER_OF_LETTERS = 26;
 
     private Node root = new Node();
@@ -43,8 +43,7 @@ public class RWayTrie implements Trie {
     private boolean get(String word) {
         int index = 0;
         Node node = get(root, word, index);
-        if (node == null) return false;
-        return node.isWord;
+        return node != null && node.isWord;
     }
 
     @Override
@@ -52,23 +51,17 @@ public class RWayTrie implements Trie {
         int index = 0;
         Node node = get(root, word, index);
         if (node == null) return false;
-        else {
-            if (node.isWord == true) {
-                size--;
-                node.isWord = false;
-                return true;
-            }
+        else if (node.isWord) {
+            size--;
+            node.isWord = false;
+            return true;
         }
         return false;
     }
 
     private Node get(Node root, String word, int index) {
-        if (root == null) {
-            return null;
-        }
-        if (index == word.length()) {
-            return root;
-        }
+        if (root == null) return null;
+        if (index == word.length()) return root;
         char c = word.charAt(index);
         return get(root.nextNodes[getPosition(c)], word, index + 1);
     }
@@ -102,7 +95,7 @@ public class RWayTrie implements Trie {
     }
 
     private int getPosition(char c) {
-        return c - A_ASCII_CODE;
+        return c - ASCII_CODE_OF_FIRST_LETTER;
     }
 
     private char[] createAlphabet() {
