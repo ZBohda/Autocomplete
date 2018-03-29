@@ -1,120 +1,76 @@
 package com.autocomplete;
 
-import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class RWayTrie implements Trie {
 
-    private List<Node> roots = new ArrayList<>();
+    private static final int A_ASCII_CODE = 97;
+    private static final int NUMBER_OF_LETTERS = 26;
+
+    private Node root = new Node();
     private int size;
 
     @Override
     public void add(Tuple tuple) {
-        char[] characters;
         String word = tuple.getWord();
-        char firstChar = getFirstChar(word);
-        characters = getArrayOfCharsWithoutFirstChar(word);
-        Node root = findRootNodeByChar(firstChar);
-        int counter = 0;
-        for (char c : characters) {
-            if (root.nextNodes.isEmpty()) {
-                root = insertNode(c, root);
-                counter++;
-                if (characters.length == counter) {
-                    root.isWord = true;
-                    size++;
-                }
-            } else {
-                Node sheet = findSheetByChar(root, c);
-                if (sheet != null) {
-                    root = sheet;
-                    counter++;
-                    if (characters.length == counter) {
-                        root.isWord = true;
-                        size++;
-                    }
-                } else {
-                    root = insertNode(c, root);
-                    counter++;
-                    if (characters.length == counter) {
-                        root.isWord = true;
-                        size++;
-                    }
-                }
+        int weight = tuple.getWeight();
+        put(root, word, weight);
+    }
+
+    private Node put(Node root, String word, int weight) {
+        int index = 0;
+        while (index < weight) {
+            char c = word.charAt(index);
+            Node next = root.nextNodes[getPosition(c)];
+            if (next == null) {
+                next = new Node(c, root);
+                root.nextNodes[getPosition(c)] = next;
             }
+            root = next;
+            index++;
         }
-    }
-
-    private char getFirstChar(String s) {
-        return s.substring(0, 1).charAt(0);
-    }
-
-    private char[] getArrayOfCharsWithoutFirstChar(String s) {
-        return s.substring(1).toCharArray();
-    }
-
-    private Node insertNode(char c, Node root) {
-        Node node = new Node(c, root);
-        node.prevNode = root;
-        root.nextNodes.add(node);
-        return node;
+        if (!root.isWord) size++;
+        root.isWord = true;
+        return root;
     }
 
     @Override
     public boolean contains(String word) {
-        char[] characters;
-        char firstChar = getFirstChar(word);
-        characters = getArrayOfCharsWithoutFirstChar(word);
-        Node root = findRootNodeByChar(firstChar);
-        return findNodeWord(characters, root) != null;
+        return get(word);
     }
 
-    private Node findNodeWord(char[] characters, Node root) {
-        int counter = 0;
-        for (char c : characters) {
-            Node node;
-            if ((node = findSheetByChar(root, c)) != null) {
-                counter++;
-                if (counter == characters.length && node.isWord) {
-                    return node;
-                } else root = node;
-            }
-        }
-        return null;
-    }
-
-    private Node findRootNodeByChar(char c) {
-        for (Node root : roots) {
-            if (c == root.character) {
-                return root;
-            }
-        }
-        return null;
-    }
-
-    private Node findSheetByChar(Node root, char c) {
-        List<Node> nodes = root.nextNodes;
-        for (Node node : nodes) {
-            if (node.character == c) {
-                return node;
-            }
-        }
-        return null;
+    private boolean get(String word) {
+        int index = 0;
+        Node node = get(root, word, index);
+        if (node == null) return false;
+        return node.isWord;
     }
 
     @Override
     public boolean delete(String word) {
-        char[] characters;
-        char firstChar = getFirstChar(word);
-        characters = getArrayOfCharsWithoutFirstChar(word);
-        Node root = findRootNodeByChar(firstChar);
-        Node node;
-        if ((node = findNodeWord(characters, root)) != null) {
-            node.isWord = false;
-            return true;
-        } else return false;
+        int index = 0;
+        Node node = get(root, word, index);
+        if (node == null) return false;
+        else {
+            if (node.isWord == true) {
+                size--;
+                node.isWord = false;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Node get(Node root, String word, int index) {
+        if (root == null) {
+            return null;
+        }
+        if (index == word.length()) {
+            return root;
+        }
+        char c = word.charAt(index);
+        return get(root.nextNodes[getPosition(c)], word, index + 1);
     }
 
     @Override
@@ -125,24 +81,6 @@ public class RWayTrie implements Trie {
     @Override
     public Iterable<String> wordsWithPrefix(String pref) {
         return null;
-    }
-
-    private Iterator<String> getIterator() {
-        return new Iterator<String>() {
-
-            private String word;
-            private Queue<Node> nodes = new ArrayDeque<>();
-
-            @Override
-            public boolean hasNext() {
-                return false;
-            }
-
-            @Override
-            public String next() {
-                return null;
-            }
-        };
     }
 
     @Override
@@ -157,9 +95,14 @@ public class RWayTrie implements Trie {
     private void createTriesWithAlphabet() {
         char[] alphabet = createAlphabet();
         for (char c : alphabet) {
-            Node node = new Node(c, false);
-            roots.add(node);
+            Node node = new Node();
+            node.character = c;
+            root.nextNodes[getPosition(c)] = node;
         }
+    }
+
+    private int getPosition(char c) {
+        return c - A_ASCII_CODE;
     }
 
     private char[] createAlphabet() {
@@ -167,29 +110,18 @@ public class RWayTrie implements Trie {
                 .mapToObj(c -> "" + (char) c).collect(Collectors.joining()).toCharArray();
     }
 
-    public List<Node> getRoots() {
-        return roots;
-    }
-
-    public void setRoots(List<Node> roots) {
-        this.roots = roots;
-    }
-
-    public class Node {
+    private class Node {
         private char character;
         private boolean isWord;
-        private List<Node> nextNodes = new ArrayList<>();
+        private Node[] nextNodes = new Node[NUMBER_OF_LETTERS];
         private Node prevNode;
 
-        public Node(char character, boolean isWord) {
+        public Node(char character, Node node) {
             this.character = character;
-            this.isWord = isWord;
+            this.prevNode = node;
         }
 
-        public Node(char character, Node prefNode) {
-            this.character = character;
-            this.prevNode = prefNode;
+        public Node() {
         }
     }
-
 }

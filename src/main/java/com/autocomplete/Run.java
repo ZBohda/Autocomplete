@@ -1,19 +1,18 @@
 package com.autocomplete;
 
+import static com.autocomplete.DictionaryDataLoader.getData;
+
 public class Run {
 
     public static void main(String... args) {
         PrefixMatches prefixMatches = new PrefixMatches();
-        String[] strings = InputReader.getInputData();
+        String[] strings = getData("resources/words.txt");
         prefixMatches.add(strings);
         System.out.println(prefixMatches.size());
-        prefixMatches.add("pooooooooooossssssssssssssssss");
+        System.out.println(prefixMatches.contains("www"));
+        System.out.println(prefixMatches.delete("ww"));
         System.out.println(prefixMatches.size());
-        String[] strings1 = {"looajhsdawfahgwvad", "ajhwvdawagwdanwbahw", null, "ahwagwawgdw hgwhawiwoaiuwfda asjhdhawkjghahwdjhg"};
-        prefixMatches.add(strings1);
-        System.out.println(prefixMatches.size());
-        prefixMatches.add("sasda");
-        System.out.println(prefixMatches.delete("asjhdhawkjghahwdjhg"));
-        System.out.println(prefixMatches.delete("asjhdhawkjghahwdjhg"));
+
+
     }
 }
