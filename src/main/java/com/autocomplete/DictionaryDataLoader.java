@@ -23,7 +23,6 @@ public class DictionaryDataLoader {
         } catch (IOException e) {
             LOG.error(e);
         }
-
         return Pattern.compile(WORD_REGEX).split(stringBuilder);
     }
 }
