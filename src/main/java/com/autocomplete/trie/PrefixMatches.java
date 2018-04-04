@@ -1,4 +1,4 @@
-package com.autocomplete;
+package com.autocomplete.trie;
 
 import java.util.ArrayDeque;
 import java.util.Iterator;

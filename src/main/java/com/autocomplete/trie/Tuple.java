@@ -1,4 +1,4 @@
-package com.autocomplete;
+package com.autocomplete.trie;
 
 final class Tuple {
 

@@ -1,4 +1,4 @@
-package com.autocomplete;
+package com.autocomplete.utils;
 
 import org.apache.log4j.Logger;
 
