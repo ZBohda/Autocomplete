@@ -1,6 +1,6 @@
 package com.autocomplete.trie;
 
-interface Trie {
+public interface Trie {
 
     void add(Tuple tuple);
 

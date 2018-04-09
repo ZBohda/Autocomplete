@@ -1,6 +1,6 @@
 package com.autocomplete.trie;
 
-final class Tuple {
+public final class Tuple {
 
     private String word;
     private int weight;
