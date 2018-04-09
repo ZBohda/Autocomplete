@@ -13,6 +13,9 @@ public class RWayTrie implements Trie {
     private static final int ASCII_CODE_OF_LAST_LETTER = 122;
     private static final int NUMBER_OF_LETTERS = 26;
     private static final String EMPTY_PREFIX = "";
+    private static final char FIRST_CHAR_OF_ALPHABET = 'a';
+    private static final char LAST_CHAR_OF_ALPHABET = 'z';
+    private final static int MINIMAL_WORD_LENGTH = 2;
 
 
     private Node root = new Node();
@@ -44,10 +47,10 @@ public class RWayTrie implements Trie {
 
     @Override
     public boolean contains(String word) {
-        return get(word);
+        return isTrieContainsWord(word);
     }
 
-    private boolean get(String word) {
+    private boolean isTrieContainsWord(String word) {
         int index = 0;
         Node node = get(root, word, index);
         return node != null && node.isWord;
@@ -95,7 +98,7 @@ public class RWayTrie implements Trie {
     }
 
     private boolean IsPrefValid(String pref) {
-        return pref != null && pref.length() >= 2;
+        return pref != null && pref.length() >= MINIMAL_WORD_LENGTH;
     }
 
     private Iterable<String> collectByPref(Node rootNodeForPref) {
@@ -172,7 +175,7 @@ public class RWayTrie implements Trie {
     }
 
     private char[] createAlphabet() {
-        return IntStream.rangeClosed('a', 'z')
+        return IntStream.rangeClosed(FIRST_CHAR_OF_ALPHABET, LAST_CHAR_OF_ALPHABET)
                 .mapToObj(c -> "" + (char) c).collect(Collectors.joining()).toCharArray();
     }
 
