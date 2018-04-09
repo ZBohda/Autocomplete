@@ -7,7 +7,7 @@ import java.util.Queue;
 
 public class PrefixMatches {
 
-    private final static String DIVIDER = " ";
+    private final static String WORDS_DIVIDER = " ";
     private final static int MINIMAL_WORD_LENGTH = 2;
 
     private Trie trie = new RWayTrie();
@@ -16,34 +16,28 @@ public class PrefixMatches {
     }
 
     public int add(String... strings) {
-        int counter = 0;
+        int numberOfAddedWords = 0;
         if (strings != null && strings.length > 0) {
             for (String s : strings) {
-                counter = counter + readString(s);
+                numberOfAddedWords += addWords(s);
             }
         }
-        return counter;
+        return numberOfAddedWords;
     }
 
-    private int readString(String s) {
-        int words = 0;
-        if (s != null) {
-            words = words + addWord(s);
-        }
-        return words;
-    }
-
-    private int addWord(String s) {
-        int words = 0;
-        String[] strings = s.split(DIVIDER);
-        for (String string : strings) {
-            if (string.length() > MINIMAL_WORD_LENGTH) {
-                Tuple tuple = new Tuple(string);
-                trie.add(tuple);
-                words++;
+    private int addWords(String s) {
+        int numberOfAddedWords = 0;
+        if(s != null){
+            String[] strings = s.split(WORDS_DIVIDER);
+            for (String string : strings) {
+                if (string.length() > MINIMAL_WORD_LENGTH) {
+                    Tuple tuple = new Tuple(string);
+                    trie.add(tuple);
+                    numberOfAddedWords++;
+                }
             }
         }
-        return words;
+        return numberOfAddedWords;
     }
 
     public boolean contains(String word) {
@@ -109,7 +103,7 @@ public class PrefixMatches {
     }
 
     private boolean IsPrefValid(String pref) {
-        return pref != null && pref.length() >= 2;
+        return pref != null && pref.length() >= MINIMAL_WORD_LENGTH;
     }
 
     public Iterable<String> wordsWithPrefix(String pref) {
