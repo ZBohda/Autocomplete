@@ -1,4 +1,8 @@
-package com.autocomplete.trie;
+package com.autocomplete;
+
+import com.autocomplete.trie.RWayTrie;
+import com.autocomplete.trie.Trie;
+import com.autocomplete.trie.Tuple;
 
 import java.util.ArrayDeque;
 import java.util.Iterator;

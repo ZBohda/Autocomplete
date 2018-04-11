@@ -1,7 +1,7 @@
 package com.autocomplete;
 
-import com.autocomplete.trie.PrefixMatches;
 import com.autocomplete.trie.Trie;
+import com.autocomplete.trie.Tuple;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -13,7 +13,8 @@ import java.util.Iterator;
 import java.util.Queue;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 
@@ -49,9 +50,21 @@ public class PrefixMatchesTest {
     }
 
     @Test
-    public void shouldReturnTrueIfWordIsValid() {
+    public void shouldReturnTrueIfWordIsValidAndExists() {
         when(trie.contains(FIRST_VALID_WORD)).thenReturn(true);
         assertTrue(instance.contains(FIRST_VALID_WORD));
+    }
+
+    @Test
+    public void shouldReturnFalseIfWordIsValidAndDoesNotExists() {
+        when(trie.contains(FIRST_VALID_WORD)).thenReturn(false);
+        assertFalse(instance.contains(FIRST_VALID_WORD));
+    }
+
+    @Test
+    public void shouldReturnFalseIfContainsAnEmptyWord() {
+        when(trie.contains(EMPTY_STRING)).thenReturn(false);
+        assertFalse(instance.contains(EMPTY_STRING));
     }
 
     @Test
@@ -61,8 +74,14 @@ public class PrefixMatchesTest {
     }
 
     @Test
+    public void shouldReturnFalseIfWordIsValidAndDeleteValidWord() {
+        when(trie.delete(FIRST_VALID_WORD)).thenReturn(false);
+        assertFalse(instance.delete(FIRST_VALID_WORD));
+    }
+
+    @Test
     public void shouldReturnFalseIfDeleteNull() {
-        when(trie.delete(INVALID_WORD)).thenReturn(false);
+        when(trie.delete(null)).thenReturn(false);
         assertFalse(instance.delete(null));
     }
 
@@ -82,6 +101,7 @@ public class PrefixMatchesTest {
     public void shouldReturnFalseIfInvalidPrefixUsedForSearch() {
         when(trie.wordsWithPrefix(INVALID_PREFIX)).thenReturn(new ArrayDeque<>());
         assertFalse(instance.wordsWithPrefix(INVALID_PREFIX).iterator().hasNext());
+
     }
 
     @Test
@@ -101,6 +121,25 @@ public class PrefixMatchesTest {
         String stringArray[] = {FIRST_VALID_WORD + WORDS_DIVIDER + SECOND_VALID_WORD, null, EMPTY_STRING, THIRD_VALID_WORD};
         int numberOfAddedWords = 3;
         assertEquals(numberOfAddedWords, instance.add(stringArray));
+        verify(trie, times(numberOfAddedWords)).add(any(Tuple.class));
+        verify(trie, never()).add(null);
+    }
+
+    @Test
+    public void shouldAddOneWordIfAddArrayStringWithValidData() {
+        String stringArray[] = {FIRST_VALID_WORD};
+        int numberOfAddedWords = 1;
+        assertEquals(numberOfAddedWords, instance.add(stringArray));
+        verify(trie, times(numberOfAddedWords)).add(any(Tuple.class));
+    }
+
+    @Test
+    public void shouldNotAddAnyWordsIfAddNullArrayString() {
+        String stringArray[] = null;
+        int numberOfAddedWords = 0;
+        assertEquals(numberOfAddedWords, instance.add(stringArray));
+        verify(trie, times(numberOfAddedWords)).add(any(Tuple.class));
+        verify(trie, never()).add(any(Tuple.class));
     }
 
     @Test
@@ -115,7 +154,7 @@ public class PrefixMatchesTest {
     }
 
     @Test
-    public void shouldReturnOneWordIfPrefixIsValidAndSearchDepthEqualsToTwo(){
+    public void shouldReturnOneWordIfPrefixIsValidAndSearchDepthEqualsToTwo() {
         Queue<String> queue = new ArrayDeque<>();
         queue.add(FIRST_VALID_WORD);
         queue.add(SECOND_VALID_WORD);
@@ -125,5 +164,27 @@ public class PrefixMatchesTest {
         assertTrue(matchesIterator.hasNext());
         assertEquals(matchesIterator.next(), FIRST_VALID_WORD);
         assertFalse(matchesIterator.hasNext());
+    }
+
+    @Test
+    public void shouldReturnFalseIfTryToGetWordsByInvalidPrefix() {
+        Queue<String> queue = new ArrayDeque<>();
+        when(trie.wordsWithPrefix(INVALID_PREFIX)).thenReturn(queue);
+        matchesIterator = instance.wordsWithPrefix(INVALID_PREFIX).iterator();
+        assertFalse(matchesIterator.hasNext());
+    }
+
+    @Test
+    public void shouldReturnFalseIfTryToGetWordsByNullPrefix() {
+        Queue<String> queue = new ArrayDeque<>();
+        when(trie.wordsWithPrefix(null)).thenReturn(queue);
+        matchesIterator = instance.wordsWithPrefix(null).iterator();
+        assertFalse(matchesIterator.hasNext());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowIllegalArgumentExceptionIfInvalidSearchDepthUsed() {
+        int searchDepth = -1;
+        instance.wordsWithPrefix(VALID_PREFIX, searchDepth).iterator();
     }
 }

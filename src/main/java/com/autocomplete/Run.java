@@ -1,7 +1,5 @@
 package com.autocomplete;
 
-import com.autocomplete.trie.PrefixMatches;
-
 import java.util.Iterator;
 
 import static com.autocomplete.utils.DictionaryDataLoader.getData;
