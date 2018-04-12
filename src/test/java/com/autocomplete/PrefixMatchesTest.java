@@ -95,6 +95,7 @@ public class PrefixMatchesTest {
     public void shouldReturnZeroIfTrieIsEmpty() {
         when(trie.size()).thenReturn(0);
         assertEquals(0, instance.size());
+        verify(trie).size();
     }
 
     @Test

@@ -31,7 +31,7 @@ public class PrefixMatches {
 
     private int addWords(String s) {
         int numberOfAddedWords = 0;
-        if(s != null){
+        if (s != null) {
             String[] strings = s.split(WORDS_DIVIDER);
             for (String string : strings) {
                 if (string.length() > MINIMAL_WORD_LENGTH) {
@@ -107,7 +107,7 @@ public class PrefixMatches {
     }
 
     private boolean IsPrefValid(String pref) {
-        return pref != null && pref.length() >= MINIMAL_WORD_LENGTH;
+        return pref != null && (pref.length() >= MINIMAL_WORD_LENGTH || pref.isEmpty());
     }
 
     public Iterable<String> wordsWithPrefix(String pref) {

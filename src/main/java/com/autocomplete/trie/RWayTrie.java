@@ -98,7 +98,7 @@ public class RWayTrie implements Trie {
     }
 
     private boolean IsPrefValid(String pref) {
-        return pref != null && pref.length() >= MINIMAL_WORD_LENGTH;
+        return pref != null && (pref.length() >= MINIMAL_WORD_LENGTH || pref.isEmpty());
     }
 
     private Iterable<String> collectByPref(Node rootNodeForPref) {
